@@ -6,6 +6,7 @@ export interface HomeSliderTypes {
 
 export interface Datum {
   id: number;
+  link?: string;
   header: string;
   txt: string;
   btn_txt: string;

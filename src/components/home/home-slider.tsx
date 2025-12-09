@@ -10,6 +10,8 @@ import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper as SwiperCore } from "swiper";
 
 import "swiper/css";
+import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 const HomeSlider = () => {
   const activeLang = useZusLang((state) => state.activeLang);
@@ -61,9 +63,16 @@ const HomeSlider = () => {
           }}
         >
           {swappedData &&
-            swappedData.map((slide, index) => {
+            swappedData.map((slide) => {
               const SlideContent = (
-                <>
+                <Link
+                  to={slide.link ? slide.link : ""}
+                  className={cn(
+                    slide.link
+                      ? "pointer-events-auto cursor-pointer"
+                      : "pointer-events-none cursor-default"
+                  )}
+                >
                   <div className="w-full h-full relative">
                     {(slide.header || slide.txt) && (
                       <div className="absolute bottom-0 left-0 right-0 h-full w-full bg-SLIDER_IMAGE_GRADIENT"></div>
@@ -74,6 +83,7 @@ const HomeSlider = () => {
                       className="w-full mx-auto h-full object-cover object-center"
                     />
                   </div>
+
                   <div className="absolute left-0 w-full bottom-[80px] z-10">
                     <Container>
                       <div className="flex flex-col gap-[40px] max-w-[1000px]">
@@ -90,7 +100,7 @@ const HomeSlider = () => {
                       </div>
                     </Container>
                   </div>
-                </>
+                </Link>
               );
 
               return (
@@ -98,13 +108,7 @@ const HomeSlider = () => {
                   key={slide.id}
                   className="sm:h-[620px] h-[228px] relative"
                 >
-                  {index === 0 ? (
-                    <a href={"/news/60"} className="block w-full h-full">
-                      {SlideContent}
-                    </a>
-                  ) : (
-                    SlideContent
-                  )}
+                  {SlideContent}
                 </SwiperSlide>
               );
             })}

@@ -28,6 +28,10 @@ type CarouselContextProps = {
   canScrollNext: boolean;
 } & CarouselProps;
 
+type CarouselContentProps = React.HTMLAttributes<HTMLDivElement> & {
+  isVisible?: boolean;
+};
+
 const CarouselContext = React.createContext<CarouselContextProps | null>(null);
 
 function useCarousel() {
@@ -148,32 +152,31 @@ const Carousel = React.forwardRef<
 );
 Carousel.displayName = "Carousel";
 
-const CarouselContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-  const { carouselRef, orientation } = useCarousel();
+const CarouselContent = React.forwardRef<HTMLDivElement, CarouselContentProps>(
+  ({ className, isVisible, ...props }, ref) => {
+    const { carouselRef, orientation } = useCarousel();
 
-  return (
-    <div
-      ref={carouselRef}
-      className={cn({
-        "overflow-hidden": !props.isVisible,
-        "overflow-visible": props.isVisible,
-      })}
-    >
+    return (
       <div
-        ref={ref}
-        className={cn(
-          "flex",
-          orientation === "horizontal" ? "" : "mt-0 flex-col",
-          className
-        )}
-        {...props}
-      />
-    </div>
-  );
-});
+        ref={carouselRef}
+        className={cn({
+          "overflow-hidden": !isVisible,
+          "overflow-visible": isVisible,
+        })}
+      >
+        <div
+          ref={ref}
+          className={cn(
+            "flex",
+            orientation === "horizontal" ? "" : "mt-0 flex-col",
+            className
+          )}
+          {...props}
+        />
+      </div>
+    );
+  }
+);
 CarouselContent.displayName = "CarouselContent";
 
 const CarouselItem = React.forwardRef<
